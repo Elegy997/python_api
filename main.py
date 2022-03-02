@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import *
 import json
 import sqlite3
 from flask_cors import CORS
@@ -6,6 +6,14 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/view")
+def view():
+    con = sqlite3.connect("employee.db")
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+    cur.execute("select * from Employees")
+    rows = cur.fetchall()
+    return json.dumps([dict(ix) for ix in rows])
 
 @app.route("/savedetails/", methods=["POST"])
 def saveDetails():
@@ -28,16 +36,6 @@ def saveDetails():
         return name
         con.close()
 
-@app.route("/view")
-def view():
-    con = sqlite3.connect("employee.db")
-    con.row_factory = sqlite3.Row
-    cur = con.cursor()
-    cur.execute("select * from Employees")
-    rows = cur.fetchall()
-    return json.dumps([dict(ix) for ix in rows])
-
-
 @app.route("/deleterecord/", methods=["POST"])
 def deleterecord():
     data = request.get_json(force=True)
@@ -51,26 +49,27 @@ def deleterecord():
         except:
             msg = "can't be deleted"
 
-@app.route("/updatedetails", methods=["POST"])
+@app.route("/updatedetails/", methods=["POST"])
 def updaterecord():
-    msg = "msg"
-    if request.method == "POST":
-        try:
-            id = request.form["id"]
-            name = request.form["name"]
-            email = request.form["email"]
-            address = request.form["address"]
-            with sqlite3.connect("employee.db") as con:
-                cur = con.cursor()
-                cur.execute("UPDATE Employees SET name=?, email=?, address=? WHERE id=?", (name, email, address, id))
-                con.commit()
-                msg = "Employee successfully Updated"
-        except:
-            con.rollback()
-            msg = "We can not update the employee to the list"
-        finally:
-            return msg
-            con.close()
+    try:
+        data = request.get_json(force=True)
+        print(data)
+        id = data["id"]
+        name = data["name"]
+        email = data["email"]
+        address = data["address"]
+
+        with sqlite3.connect("employee.db") as con:
+            cur = con.cursor()
+            cur.execute("UPDATE Employees SET name=?, email=?, address=? WHERE id=?", (name, email, address, id))
+            con.commit()
+            msg = "Employee successfully Updated"
+    except:
+        con.rollback()
+        msg = "We can not update the employee to the list"
+    finally:
+        return msg
+        con.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
