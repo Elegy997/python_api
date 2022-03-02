@@ -16,21 +16,35 @@ request.send()
   }
 
   function view(data, request, id){
+      if(id == "view"){
     if (request.status >= 200 && request.status < 400) {
          data.forEach((query) => {
           console.log(request.status);
-          var div = document.createElement("div");
+          var div = document.createElement("tr");
             var mainContainer = document.getElementById(id);
-          div.innerHTML = "<h5>"+query.id+"</h5><h6>"+query.name+"</h6><p>"+ query.email +"</p><hr>";
+          div.innerHTML = "<td>"+query.id+"</td><td>"+query.name+"</td><td>"+ query.email +"</td><td>"+query.address+"</td>"+"<button onclick = 'deleterecord("+query.id+")' type = 'submit' value='Submit'>Delete</button>"+"<button onclick = 'update("+query.id+")'>Update</button>" ;
           mainContainer.appendChild(div)
         })
       } else {
         console.log('error')
-      }
+      }}
   }
 
 async function generate_html(){
 await generator(url, id);
+}
+
+function deleterecord(id){
+  const data = JSON.stringify({
+    id: parseInt(id)
+  });
+  
+  navigator.sendBeacon('http://127.0.0.1:5000/deleterecord/', data);
+  console.log(data);
+}
+function update(id){
+  console.log("update: " + id)
+
 }
 
 generate_html();
