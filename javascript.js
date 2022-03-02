@@ -22,7 +22,7 @@ request.send()
           console.log(request.status);
           var div = document.createElement("tr");
             var mainContainer = document.getElementById(id);
-          div.innerHTML = "<td>"+query.id+"</td><td>"+query.name+"</td><td>"+ query.email +"</td><td>"+query.address+"</td>"+"<button onclick = 'deleterecord("+query.id+")' type = 'submit' value='Submit'>Delete</button>"+"<button onclick = 'update("+query.id+")'>Update</button>" ;
+          div.innerHTML = "<td>"+query.id+"</td><td><input id='name"+query.id+"' placeholder='"+query.name+"' value='"+query.name+"'/></td><td><input id='email"+query.id+"' placeholder='"+query.email+"' value='"+query.email+"'/></td><td><input id='address"+query.id+"' placeholder='"+query.address+"' value='"+query.address+"'/></td>"+"<button onclick = 'deleterecord("+query.id+")' type = 'submit' value='Submit'>Delete</button>"+"<button onclick = 'update("+query.id+")'>Update</button>" ;
           mainContainer.appendChild(div)
         })
       } else {
@@ -43,8 +43,15 @@ function deleterecord(id){
   console.log(data);
 }
 function update(id){
-  console.log("update: " + id)
-
+  const data = JSON.stringify({
+    id: id,
+    name: document.getElementById("name"+id).value,
+    email: document.getElementById("email"+id).value,
+    address:document.getElementById("address"+id).value
+  });
+  
+  navigator.sendBeacon('http://127.0.0.1:5000/updatedetails/', data);
+  console.log(data);
 }
 
 generate_html();
