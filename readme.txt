@@ -9,3 +9,7 @@ Miután ezek megvannak:
 6. Terminál: python employeeDB.py Így létrejön a db fájl.
 7. Ezt követően elindítható a webapp és ha sikerült elindítani, utána nyisd meg az add.html fájlt, adj pár adatot hozzá az adatbázishoz.
 8. Ha már van rekord az adatbázisban, akkor megnyitható az index.html fájl és ki kell írnia az adatokat a nyomógombokkal együtt.
+
+
+Fontos!!! Mivel a tananyag kezdőknek szól és elsősorban az api működésének megértése a cél, így bizonyos részeknél a tiszta kódolás elvei, 
+illetve más erőforrásbarát megoldások, illetve a biztonság nem feltétlenül érvényesültek. Ebből adódóan kizárólag tanulás során javasolt ezeket a megoldásokat használni, éles környezetben semmiképpen!
